@@ -1,11 +1,12 @@
 package game2048;
 
+import java.util.Arrays;
 import java.util.Formatter;
 import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author Suu
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -113,6 +114,313 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+//        for (int c = 0; c < board.size(); c++) {
+//            for (int r = 0; r < board.size(); r++) {
+//                Tile t = board.tile(c, r);
+//                if (board.tile(c, r) != null) {
+//                    board.move(c, 3, t);
+//                    changed = true;
+//                    score += 7;
+//                }
+//            }
+//        }
+        boolean ischange = false;
+        switch (side) {
+            case NORTH : {
+                int[][] aftercalulatevalue = new int[board.size()][board.size()];
+                int marks = score;
+
+                for (int c= 0; c < board.size(); c++) {
+                    int i = 0;
+                    int numbernonzero = 0;
+                    int[] valueTemp = new int[board.size()];   //include "0"
+                    int[] value = new int[board.size()];       //exclude "0"
+
+                    int number = 0;
+                    for (int r = board.size() - 1; r >= 0; r--) {
+                        if (board.tile(c, r) != null) {
+                            valueTemp[i] = board.tile(c, r).value();
+//                    board.addTile(null);
+                        }
+                        i++;
+                    }
+
+//            System.out.println(Arrays.toString(valueTemp));
+
+                    for (i = 0; i < board.size(); i++) {
+                        if (valueTemp[i] != 0) {
+                            value[numbernonzero] = valueTemp[i];
+                            numbernonzero++;
+                        }
+                    }
+
+//            System.out.println(Arrays.toString(value));
+
+                    for (int j = 0; j < numbernonzero - 1; j++) {
+                        if (value[j] == value[j + 1]) {
+                            value[j] += value[j];
+                            value[j + 1] = 0;
+                            marks += value[j];
+                        }
+                    }
+
+//            System.out.println(marks);
+
+//            System.out.println(Arrays.toString(value));
+
+                    for (int j = 0; j < numbernonzero; j++) {
+                        if (value[j] != 0) {
+                            aftercalulatevalue[c][number] = value[j];
+                            number++;
+                        }
+                    }
+
+                    for (i = 0; i < board.size(); i++) {
+                        if (aftercalulatevalue[c][i] != valueTemp[i]) {
+                            ischange = true;
+                            break;
+                        }
+                    }
+
+//            for (int j = board.size() - 1; j >= number; j--) {
+//                Tile t = Tile.create(aftercalulatevalue[c][number], c, j);
+//                board.addTile(t);
+//            }
+
+//            changed = true;
+//            score += marks;
+                }
+
+                clear();
+
+                for (int indexc = 0; indexc < board.size(); indexc++) {
+                    for (int indexr = 0; indexr < board.size(); indexr++) {
+                        if (aftercalulatevalue[indexc][indexr] != 0) {
+                            Tile t = Tile.create(aftercalulatevalue[indexc][indexr], indexc, board.size() - 1 - indexr);
+                            board.addTile(t);
+                        }
+                    }
+                }
+                score = marks;
+                if (ischange){
+                    changed = true;
+                }
+                break;
+            }
+            case WEST: {
+                int[][] aftercalulatevalue = new int[board.size()][board.size()];
+                int marks = score;
+
+                for (int r = 0; r < board.size(); r++) {
+                    int i = 0;
+                    int numbernonzero = 0;
+                    int[] valueTemp = new int[board.size()];   //include "0"
+                    int[] value = new int[board.size()];       //exclude "0"
+
+                    int number = 0;
+                    for (int c = 0; c < board.size(); c++) {
+                        if (board.tile(c, r) != null) {
+                            valueTemp[i] = board.tile(c, r).value();
+//                    board.addTile(null);
+                        }
+                        i++;
+                    }
+
+//            System.out.println(Arrays.toString(valueTemp));
+
+                    for (i = 0; i < board.size(); i++) {
+                        if (valueTemp[i] != 0) {
+                            value[numbernonzero] = valueTemp[i];
+                            numbernonzero++;
+                        }
+                    }
+
+//            System.out.println(Arrays.toString(value));
+
+                    for (int j = 0; j < numbernonzero - 1; j++) {
+                        if (value[j] == value[j + 1]) {
+                            value[j] += value[j];
+                            value[j + 1] = 0;
+                            marks += value[j];
+                        }
+                    }
+//            System.out.println(marks);
+
+//            System.out.println(Arrays.toString(value));
+
+                    for (int j = 0; j < numbernonzero; j++) {
+                        if (value[j] != 0) {
+                            aftercalulatevalue[r][number] = value[j];
+                            number++;
+                        }
+                    }
+
+//            for (int j = board.size() - 1; j >= number; j--) {
+//                Tile t = Tile.create(aftercalulatevalue[c][number], c, j);
+//                board.addTile(t);
+//            }
+
+//            changed = true;
+//            score += marks;
+                }
+
+                clear();
+
+                for (int indexr = 0; indexr < board.size(); indexr++) {
+                    for (int indexc = 0; indexc < board.size(); indexc++) {
+                        if (aftercalulatevalue[indexr][indexc] != 0) {
+                            Tile t = Tile.create(aftercalulatevalue[indexr][indexc], indexc, indexr);
+                            board.addTile(t);
+                        }
+                    }
+                }
+                score = marks;
+                changed = true;
+                break;
+            }
+            case EAST: {
+                int[][] aftercalulatevalue = new int[board.size()][board.size()];
+                int marks = score;
+
+                for (int r = 0; r < board.size(); r++) {
+                    int i = 0;
+                    int numbernonzero = 0;
+                    int[] valueTemp = new int[board.size()];   //include "0"
+                    int[] value = new int[board.size()];       //exclude "0"
+
+                    int number = 0;
+                    for (int c = board.size() - 1; c >= 0; c--) {
+                        if (board.tile(c, r) != null) {
+                            valueTemp[i] = board.tile(c, r).value();
+//                    board.addTile(null);
+                        }
+                        i++;
+                    }
+
+//            System.out.println(Arrays.toString(valueTemp));
+
+                    for (i = 0; i < board.size(); i++) {
+                        if (valueTemp[i] != 0) {
+                            value[numbernonzero] = valueTemp[i];
+                            numbernonzero++;
+                        }
+                    }
+
+//            System.out.println(Arrays.toString(value));
+
+                    for (int j = 0; j < numbernonzero - 1; j++) {
+                        if (value[j] == value[j + 1]) {
+                            value[j] += value[j];
+                            value[j + 1] = 0;
+                            marks += value[j];
+                        }
+                    }
+//            System.out.println(marks);
+
+//            System.out.println(Arrays.toString(value));
+
+                    for (int j = 0; j < numbernonzero; j++) {
+                        if (value[j] != 0) {
+                            aftercalulatevalue[r][number] = value[j];
+                            number++;
+                        }
+                    }
+
+//            for (int j = board.size() - 1; j >= number; j--) {
+//                Tile t = Tile.create(aftercalulatevalue[c][number], c, j);
+//                board.addTile(t);
+//            }
+
+//            changed = true;
+//            score += marks;
+                }
+
+                clear();
+
+                for (int indexr = 0; indexr < board.size(); indexr++) {
+                    for (int indexc = 0; indexc < board.size(); indexc++) {
+                        if (aftercalulatevalue[indexr][indexc] != 0) {
+                            Tile t = Tile.create(aftercalulatevalue[indexr][indexc], board.size() - 1 - indexc, indexr);
+                            board.addTile(t);
+                        }
+                    }
+                }
+                score = marks;
+                changed = true;
+                break;
+            }
+            case SOUTH: {
+                int[][] aftercalulatevalue = new int[board.size()][board.size()];
+                int marks = score;
+
+                for (int c= 0; c < board.size(); c++) {
+                    int i = 0;
+                    int numbernonzero = 0;
+                    int[] valueTemp = new int[board.size()];   //include "0"
+                    int[] value = new int[board.size()];       //exclude "0"
+
+                    int number = 0;
+                    for (int r = 0; r < board.size(); r++) {
+                        if (board.tile(c, r) != null) {
+                            valueTemp[i] = board.tile(c, r).value();
+//                    board.addTile(null);
+                        }
+                        i++;
+                    }
+
+//            System.out.println(Arrays.toString(valueTemp));
+
+                    for (i = 0; i < board.size(); i++) {
+                        if (valueTemp[i] != 0) {
+                            value[numbernonzero] = valueTemp[i];
+                            numbernonzero++;
+                        }
+                    }
+
+//            System.out.println(Arrays.toString(value));
+
+                    for (int j = 0; j < numbernonzero - 1; j++) {
+                        if (value[j] == value[j + 1]) {
+                            value[j] += value[j];
+                            value[j + 1] = 0;
+                            marks += value[j];
+                        }
+                    }
+//            System.out.println(marks);
+
+//            System.out.println(Arrays.toString(value));
+
+                    for (int j = 0; j < numbernonzero; j++) {
+                        if (value[j] != 0) {
+                            aftercalulatevalue[c][number] = value[j];
+                            number++;
+                        }
+                    }
+
+//            for (int j = board.size() - 1; j >= number; j--) {
+//                Tile t = Tile.create(aftercalulatevalue[c][number], c, j);
+//                board.addTile(t);
+//            }
+
+//            changed = true;
+//            score += marks;
+                }
+
+                clear();
+
+                for (int indexc = 0; indexc < board.size(); indexc++) {
+                    for (int indexr = 0; indexr < board.size(); indexr++) {
+                        if (aftercalulatevalue[indexc][indexr] != 0) {
+                            Tile t = Tile.create(aftercalulatevalue[indexc][indexr], indexc, indexr);
+                            board.addTile(t);
+                        }
+                    }
+                }
+                score = marks;
+                changed = true;
+                break;
+            }
+        }
 
         checkGameOver();
         if (changed) {
@@ -181,17 +489,21 @@ public class Model extends Observable {
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
         boolean onemove = false;
+
+        for (int i = 0; i < b.size(); i++) {    //if there is free space,return true
+            for (int j = 0; j < b.size(); j++) {
+                if (b.tile(i, j) == null) {
+                    onemove = true;
+                    return onemove;
+                }
+            }
+        }
         for (int i = 0; i < b.size(); i++) {
             for (int j = 0; j < b.size(); j++) {
-                if (b.tile(i,j) == null) {        //if there is free space,return true
-                    onemove = true;
-                    break;
-                }
-
                 if (i != 0 && i != b.size() - 1 && j !=0 && j != b.size() - 1) {        //judge whether the middle space have chance to change
-                    int value = b.tile(i,j).value();
-                    int up = b.tile(i,j - 1).value();
-                    int down = b.tile(i, j + 1).value();
+                    int value = b.tile(i, j).value();
+                    int up = b.tile(i,j + 1).value();
+                    int down = b.tile(i, j - 1).value();
                     int left = b.tile(i - 1, j).value();
                     int right = b.tile(i + 1, j).value();
                     if (value == up || value == down || value == left || value == right) {
@@ -203,8 +515,8 @@ public class Model extends Observable {
                 if (i == 0 && j == 0) {               //the[0][0]
                     int value00 = b.tile(i,j).value();
                     int right00 = b.tile(i + 1,j).value();
-                    int down00 = b.tile(i, j + 1).value();
-                    if (value00 == right00 || value00 == down00) {
+                    int up00 = b.tile(i, j + 1).value();
+                    if (value00 == right00 || value00 == up00) {
                         onemove = true;
                         break;
                     }
@@ -213,8 +525,8 @@ public class Model extends Observable {
                 if (i == b.size() - 1 && j == 0) {     //[0][size - 1]
                     int value0s = b.tile(i,j).value();
                     int left0s = b.tile(i - 1, j).value();
-                    int down0s = b.tile(i, j + 1).value();
-                    if (value0s == left0s || value0s == down0s) {
+                    int up0s = b.tile(i, j + 1).value();
+                    if (value0s == left0s || value0s == up0s) {
                         onemove = true;
                         break;
                     }
@@ -222,50 +534,50 @@ public class Model extends Observable {
 
                 if (i == 0 && j == b.size() - 1) {    //[size - 1][0]
                     int values0 = b.tile(i,j).value();
-                    int ups0 = b.tile(i, j - 1).value();
+                    int downs0 = b.tile(i, j - 1).value();
                     int rights0 = b.tile(i + 1, j).value();
-                    if (values0 == ups0 || values0 == rights0) {
+                    if (values0 == downs0 || values0 == rights0) {
                         onemove = true;
                         break;
                     }
                 }
 
-                if (i == b.size() && i == b.size() - 1) {   //[size - 1][size - 1]
+                if (i == b.size() - 1 && j == b.size() - 1) {   //[size - 1][size - 1]
                     int valuess = b.tile(i,j).value();
                     int leftss = b.tile(i - 1, j).value();
-                    int upss = b.tile(i ,j - 1).value();
-                    if (valuess == leftss || valuess == upss) {
+                    int downss = b.tile(i ,j - 1).value();
+                    if (valuess == leftss || valuess == downss) {
                         onemove = true;
                         break;
                     }
                 }
 
                 if (j == 0 && i != 0 && i != b.size() -1) {    //[0][1]~[0][size - 1 - 1]
-                    int valueup = b.tile(i ,j).value();
-                    int leftup = b.tile(i - 1 ,j).value();
-                    int rightup = b.tile(i + 1, j).value();
-                    int downup = b.tile(i ,j + 1).value();
-                    if (valueup == leftup || valueup == rightup || valueup == downup) {
-                        onemove = true;
-                        break;
-                    }
-                }
-
-                if (j == b.size() - 1 && i != 0 && i != b.size() - 1) {     //[size - 1][1] ~ [size - 1][size - 1 -1]
-                    int valuedown = b.tile(i,j).value();
-                    int leftdown = b.tile(i - 1,j).value();
-                    int rightdown = b.tile(i + 1,j).value();
-                    int updown = b.tile(i , j - 1).value();
+                    int valuedown = b.tile(i, j).value();
+                    int leftdown = b.tile(i - 1 ,j).value();
+                    int rightdown = b.tile(i + 1, j).value();
+                    int updown = b.tile(i ,j + 1).value();
                     if (valuedown == leftdown || valuedown == rightdown || valuedown == updown) {
                         onemove = true;
                         break;
                     }
                 }
 
+                if (j == b.size() - 1 && i != 0 && i != b.size() - 1) {     //[size - 1][1] ~ [size - 1][size - 1 -1]
+                    int valueup = b.tile(i, j).value();
+                    int leftup = b.tile(i - 1,j).value();
+                    int rightup = b.tile(i + 1,j).value();
+                    int downup = b.tile(i , j - 1).value();
+                    if (valueup == leftup || valueup == rightup || valueup == downup) {
+                        onemove = true;
+                        break;
+                    }
+                }
+
                 if (i == 0 && j != 0 && j != b.size() - 1) {     //[1][0] ~ [size - 2][0]
-                    int valueleft = b.tile(i,j).value();
-                    int upleft = b.tile(i , j - 1).value();
-                    int downleft = b.tile(i , j + 1).value();
+                    int valueleft = b.tile(i, j).value();
+                    int upleft = b.tile(i , j + 1).value();
+                    int downleft = b.tile(i , j - 1).value();
                     int rightleft = b.tile(i + 1, j).value();
                     if (valueleft == upleft || valueleft == downleft || valueleft == rightleft) {
                         onemove = true;
@@ -275,8 +587,8 @@ public class Model extends Observable {
 
                 if (i == b.size() - 1 && j != 0 && j != b.size() - 1) {      //[1][size - 1] ~ [size - 2][size - 1]
                     int valueright = b.tile(i,j).value();
-                    int upright = b.tile(i, j - 1).value();
-                    int downright = b.tile(i , j + 1).value();
+                    int upright = b.tile(i, j + 1).value();
+                    int downright = b.tile(i , j - 1).value();
                     int leftright = b.tile(i - 1 ,j).value();
                     if (valueright == upright || valueright == downright || valueright == leftright) {
                         onemove = true;
