@@ -180,7 +180,112 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
-        return false;
+        boolean onemove = false;
+        for (int i = 0; i < b.size(); i++) {
+            for (int j = 0; j < b.size(); j++) {
+                if (b.tile(i,j) == null) {        //if there is free space,return true
+                    onemove = true;
+                    break;
+                }
+
+                if (i != 0 && i != b.size() - 1 && j !=0 && j != b.size() - 1) {        //judge whether the middle space have chance to change
+                    int value = b.tile(i,j).value();
+                    int up = b.tile(i,j - 1).value();
+                    int down = b.tile(i, j + 1).value();
+                    int left = b.tile(i - 1, j).value();
+                    int right = b.tile(i + 1, j).value();
+                    if (value == up || value == down || value == left || value == right) {
+                        onemove = true;
+                        break;
+                    }
+                }
+
+                if (i == 0 && j == 0) {               //the[0][0]
+                    int value00 = b.tile(i,j).value();
+                    int right00 = b.tile(i + 1,j).value();
+                    int down00 = b.tile(i, j + 1).value();
+                    if (value00 == right00 || value00 == down00) {
+                        onemove = true;
+                        break;
+                    }
+                }
+
+                if (i == b.size() - 1 && j == 0) {     //[0][size - 1]
+                    int value0s = b.tile(i,j).value();
+                    int left0s = b.tile(i - 1, j).value();
+                    int down0s = b.tile(i, j + 1).value();
+                    if (value0s == left0s || value0s == down0s) {
+                        onemove = true;
+                        break;
+                    }
+                }
+
+                if (i == 0 && j == b.size() - 1) {    //[size - 1][0]
+                    int values0 = b.tile(i,j).value();
+                    int ups0 = b.tile(i, j - 1).value();
+                    int rights0 = b.tile(i + 1, j).value();
+                    if (values0 == ups0 || values0 == rights0) {
+                        onemove = true;
+                        break;
+                    }
+                }
+
+                if (i == b.size() && i == b.size() - 1) {   //[size - 1][size - 1]
+                    int valuess = b.tile(i,j).value();
+                    int leftss = b.tile(i - 1, j).value();
+                    int upss = b.tile(i ,j - 1).value();
+                    if (valuess == leftss || valuess == upss) {
+                        onemove = true;
+                        break;
+                    }
+                }
+
+                if (j == 0 && i != 0 && i != b.size() -1) {    //[0][1]~[0][size - 1 - 1]
+                    int valueup = b.tile(i ,j).value();
+                    int leftup = b.tile(i - 1 ,j).value();
+                    int rightup = b.tile(i + 1, j).value();
+                    int downup = b.tile(i ,j + 1).value();
+                    if (valueup == leftup || valueup == rightup || valueup == downup) {
+                        onemove = true;
+                        break;
+                    }
+                }
+
+                if (j == b.size() - 1 && i != 0 && i != b.size() - 1) {     //[size - 1][1] ~ [size - 1][size - 1 -1]
+                    int valuedown = b.tile(i,j).value();
+                    int leftdown = b.tile(i - 1,j).value();
+                    int rightdown = b.tile(i + 1,j).value();
+                    int updown = b.tile(i , j - 1).value();
+                    if (valuedown == leftdown || valuedown == rightdown || valuedown == updown) {
+                        onemove = true;
+                        break;
+                    }
+                }
+
+                if (i == 0 && j != 0 && j != b.size() - 1) {     //[1][0] ~ [size - 2][0]
+                    int valueleft = b.tile(i,j).value();
+                    int upleft = b.tile(i , j - 1).value();
+                    int downleft = b.tile(i , j + 1).value();
+                    int rightleft = b.tile(i + 1, j).value();
+                    if (valueleft == upleft || valueleft == downleft || valueleft == rightleft) {
+                        onemove = true;
+                        break;
+                    }
+                }
+
+                if (i == b.size() - 1 && j != 0 && j != b.size() - 1) {      //[1][size - 1] ~ [size - 2][size - 1]
+                    int valueright = b.tile(i,j).value();
+                    int upright = b.tile(i, j - 1).value();
+                    int downright = b.tile(i , j + 1).value();
+                    int leftright = b.tile(i - 1 ,j).value();
+                    if (valueright == upright || valueright == downright || valueright == leftright) {
+                        onemove = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return onemove;
     }
 
 
